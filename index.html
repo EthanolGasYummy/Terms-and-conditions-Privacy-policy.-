@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MCDuels Checker — Legal</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;600;800&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg: #0a0a0f;
+      --surface: #111118;
+      --border: #1e1e2e;
+      --accent: #ff4655;
+      --accent2: #7b61ff;
+      --text: #e8e8f0;
+      --muted: #6b6b80;
+      --card: #13131f;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Syne', sans-serif;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* Background grid */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(255,70,85,0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,70,85,0.03) 1px, transparent 1px);
+      background-size: 60px 60px;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* Glow blobs */
+    .blob {
+      position: fixed;
+      border-radius: 50%;
+      filter: blur(120px);
+      pointer-events: none;
+      z-index: 0;
+    }
+    .blob-1 {
+      width: 500px; height: 500px;
+      background: rgba(255,70,85,0.07);
+      top: -100px; right: -100px;
+    }
+    .blob-2 {
+      width: 400px; height: 400px;
+      background: rgba(123,97,255,0.06);
+      bottom: 100px; left: -100px;
+    }
+
+    header {
+      position: relative;
+      z-index: 10;
+      border-bottom: 1px solid var(--border);
+      padding: 0 40px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 64px;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+    }
+
+    .logo-icon {
+      width: 32px; height: 32px;
+      background: var(--accent);
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+    }
+
+    .logo-text {
+      font-size: 15px;
+      font-weight: 800;
+      color: var(--text);
+      letter-spacing: 0.02em;
+    }
+
+    .logo-text span { color: var(--accent); }
+
+    nav {
+      display: flex;
+      gap: 4px;
+    }
+
+    nav a {
+      padding: 6px 14px;
+      border-radius: 6px;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--muted);
+      text-decoration: none;
+      transition: all 0.2s;
+      font-family: 'Space Mono', monospace;
+    }
+
+    nav a:hover, nav a.active {
+      color: var(--text);
+      background: var(--border);
+    }
+
+    nav a.active { color: var(--accent); }
+
+    main {
+      position: relative;
+      z-index: 10;
+      max-width: 780px;
+      margin: 0 auto;
+      padding: 60px 24px 100px;
+    }
+
+    .page { display: none; }
+    .page.active { display: block; }
+
+    .page-header {
+      margin-bottom: 48px;
+    }
+
+    .page-tag {
+      display: inline-block;
+      font-family: 'Space Mono', monospace;
+      font-size: 11px;
+      color: var(--accent);
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      margin-bottom: 14px;
+      border: 1px solid rgba(255,70,85,0.3);
+      padding: 4px 10px;
+      border-radius: 4px;
+    }
+
+    .page-title {
+      font-size: clamp(32px, 5vw, 52px);
+      font-weight: 800;
+      line-height: 1.05;
+      letter-spacing: -0.02em;
+      margin-bottom: 16px;
+    }
+
+    .page-title span { color: var(--accent); }
+
+    .page-meta {
+      font-family: 'Space Mono', monospace;
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    .divider {
+      height: 1px;
+      background: linear-gradient(90deg, var(--accent) 0%, transparent 60%);
+      margin: 40px 0;
+      opacity: 0.3;
+    }
+
+    .section {
+      margin-bottom: 40px;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 28px 32px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .section::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, var(--accent), transparent);
+      opacity: 0.4;
+    }
+
+    .section-number {
+      font-family: 'Space Mono', monospace;
+      font-size: 11px;
+      color: var(--accent);
+      opacity: 0.6;
+      margin-bottom: 8px;
+      letter-spacing: 0.1em;
+    }
+
+    .section h2 {
+      font-size: 18px;
+      font-weight: 800;
+      margin-bottom: 14px;
+      color: var(--text);
+      letter-spacing: -0.01em;
+    }
+
+    .section p, .section li {
+      font-size: 14px;
+      line-height: 1.75;
+      color: #9999b0;
+      font-family: 'Space Mono', monospace;
+    }
+
+    .section ul {
+      margin-top: 10px;
+      padding-left: 0;
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .section li::before {
+      content: '→ ';
+      color: var(--accent);
+      opacity: 0.7;
+    }
+
+    .section a {
+      color: var(--accent);
+      text-decoration: none;
+      border-bottom: 1px solid rgba(255,70,85,0.3);
+      transition: border-color 0.2s;
+    }
+    .section a:hover { border-color: var(--accent); }
+
+    .highlight-box {
+      background: rgba(255,70,85,0.05);
+      border: 1px solid rgba(255,70,85,0.15);
+      border-radius: 8px;
+      padding: 16px 20px;
+      margin-top: 14px;
+    }
+
+    .highlight-box p {
+      color: #c0c0d0 !important;
+    }
+
+    footer {
+      position: relative;
+      z-index: 10;
+      border-top: 1px solid var(--border);
+      padding: 24px 40px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: gap;
+    }
+
+    footer p {
+      font-family: 'Space Mono', monospace;
+      font-size: 11px;
+      color: var(--muted);
+    }
+
+    footer a {
+      color: var(--accent);
+      text-decoration: none;
+    }
+
+    @media (max-width: 600px) {
+      header { padding: 0 16px; }
+      main { padding: 40px 16px 80px; }
+      .section { padding: 20px; }
+      footer { padding: 20px 16px; flex-direction: column; gap: 8px; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="blob blob-1"></div>
+<div class="blob blob-2"></div>
+
+<header>
+  <a class="logo" href="#">
+    <div class="logo-icon">⚔️</div>
+    <div class="logo-text">MCDuels<span>Checker</span></div>
+  </a>
+  <nav>
+    <a href="#" class="active" id="nav-tos" onclick="showPage('tos', this)">Terms</a>
+    <a href="#" id="nav-privacy" onclick="showPage('privacy', this)">Privacy</a>
+  </nav>
+</header>
+
+<main>
+
+  <!-- TERMS OF SERVICE -->
+  <div class="page active" id="page-tos">
+    <div class="page-header">
+      <div class="page-tag">Legal Document</div>
+      <h1 class="page-title">Terms of <span>Service</span></h1>
+      <p class="page-meta">Last updated: May 9, 2026 &nbsp;·&nbsp; MCDuelsChecker#5569</p>
+    </div>
+
+    <div class="section">
+      <div class="section-number">01</div>
+      <h2>Acceptance of Terms</h2>
+      <p>By using the MCDuels Checker Discord bot ("the Bot"), you agree to be bound by these Terms of Service. If you do not agree to these terms, do not use the Bot. These terms apply to all users who interact with the Bot in any Discord server or through user-installed access.</p>
+    </div>
+
+    <div class="section">
+      <div class="section-number">02</div>
+      <h2>What the Bot Does</h2>
+      <p>MCDuels Checker is a Discord application that provides read-only access to publicly available player statistics from the MCDuels ranking system. The Bot allows users to:</p>
+      <ul>
+        <li>Look up player rankings, Elo ratings, and kit stats</li>
+        <li>View recent match history for any player</li>
+        <li>Access information that is already publicly available via the MCDuels API</li>
+      </ul>
+    </div>
+
+    <div class="section">
+      <div class="section-number">03</div>
+      <h2>Acceptable Use</h2>
+      <p>You agree not to use the Bot to:</p>
+      <ul>
+        <li>Harass, bully, or target other players using their stats</li>
+        <li>Attempt to overload or abuse the Bot or the MCDuels API</li>
+        <li>Circumvent any rate limits or restrictions in place</li>
+        <li>Use the Bot for any unlawful purpose</li>
+      </ul>
+      <div class="highlight-box">
+        <p>Violation of these rules may result in being blocked from using the Bot without notice.</p>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-number">04</div>
+      <h2>Availability & Uptime</h2>
+      <p>The Bot is provided as-is with no guarantee of uptime or availability. The Bot may go offline for maintenance, updates, or due to issues with Discord or the MCDuels API. We are not liable for any disruption to service.</p>
+    </div>
+
+    <div class="section">
+      <div class="section-number">05</div>
+      <h2>Third-Party Data</h2>
+      <p>All player data displayed by the Bot is sourced from the public MCDuels API (<a href="https://mcduels.com" target="_blank">mcduels.com</a>). We do not control, verify, or guarantee the accuracy of this data. For any data concerns, contact MCDuels directly.</p>
+    </div>
+
+    <div class="section">
+      <div class="section-number">06</div>
+      <h2>Disclaimer of Warranties</h2>
+      <p>The Bot is provided "as is" without warranties of any kind. We make no guarantees regarding the accuracy, reliability, or completeness of any data returned by the Bot. Use the Bot at your own risk.</p>
+    </div>
+
+    <div class="section">
+      <div class="section-number">07</div>
+      <h2>Changes to Terms</h2>
+      <p>We reserve the right to modify these Terms at any time. Continued use of the Bot after changes are posted constitutes your acceptance of the new Terms. Check this page periodically for updates.</p>
+    </div>
+
+    <div class="section">
+      <div class="section-number">08</div>
+      <h2>Contact</h2>
+      <p>If you have questions about these Terms, you can reach us on Discord. Look for the Bot owner via the Discord Developer Portal application page.</p>
+    </div>
+  </div>
+
+  <!-- PRIVACY POLICY -->
+  <div class="page" id="page-privacy">
+    <div class="page-header">
+      <div class="page-tag">Legal Document</div>
+      <h1 class="page-title">Privacy <span>Policy</span></h1>
+      <p class="page-meta">Last updated: May 9, 2026 &nbsp;·&nbsp; MCDuelsChecker#5569</p>
+    </div>
+
+    <div class="section">
+      <div class="section-number">01</div>
+      <h2>Overview</h2>
+      <p>Your privacy matters. This policy explains what data MCDuels Checker collects (very little), how it's used, and your rights. We've kept this simple because the Bot is simple.</p>
+      <div class="highlight-box">
+        <p>Short version: We don't store your personal data. The Bot fetches public Minecraft stats and shows them to you. That's it.</p>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-number">02</div>
+      <h2>Data We Do NOT Collect</h2>
+      <p>MCDuels Checker does not collect, store, or log:</p>
+      <ul>
+        <li>Your Discord username, ID, or account details</li>
+        <li>The contents of your messages</li>
+        <li>Which servers you are in</li>
+        <li>Any personal information about you</li>
+        <li>Command usage history or analytics</li>
+      </ul>
+    </div>
+
+    <div class="section">
+      <div class="section-number">03</div>
+      <h2>Data Processed During Use</h2>
+      <p>When you run a command like <code style="color: var(--accent); background: rgba(255,70,85,0.1); padding: 2px 6px; border-radius: 4px;">/rank &lt;ign&gt;</code>, the Bot temporarily processes:</p>
+      <ul>
+        <li>The Minecraft username or UUID you typed</li>
+        <li>Your Discord interaction ID (used only to send you a reply)</li>
+      </ul>
+      <p style="margin-top: 12px;">This data is not saved to any database. It exists only in memory for the duration of processing your request (typically under 2 seconds).</p>
+    </div>
+
+    <div class="section">
+      <div class="section-number">04</div>
+      <h2>Third-Party Services</h2>
+      <p>The Bot makes requests to the following third-party services to function:</p>
+      <ul>
+        <li><strong style="color: var(--text);">MCDuels API</strong> (mcduels.com) — to fetch player stats and rankings</li>
+        <li><strong style="color: var(--text);">Discord API</strong> (discord.com) — to receive commands and send responses</li>
+      </ul>
+      <p style="margin-top: 12px;">These services have their own privacy policies. We have no control over how they handle data. The Minecraft usernames you look up are sent to the MCDuels API as part of the request.</p>
+    </div>
+
+    <div class="section">
+      <div class="section-number">05</div>
+      <h2>Public Minecraft Data</h2>
+      <p>All player statistics displayed by the Bot are already publicly accessible through the MCDuels website. The Bot does not expose any private information — it only reads and displays data that MCDuels has made available to the public.</p>
+    </div>
+
+    <div class="section">
+      <div class="section-number">06</div>
+      <h2>Children's Privacy</h2>
+      <p>The Bot does not knowingly collect any data from anyone, including children under 13. Since we collect no personal data at all, there is no special risk to minors from using this Bot beyond Discord's own policies.</p>
+    </div>
+
+    <div class="section">
+      <div class="section-number">07</div>
+      <h2>Changes to This Policy</h2>
+      <p>If we ever change what data we collect or how we use it, we will update this page. We encourage you to check back periodically. Continued use of the Bot after changes constitutes acceptance of the updated policy.</p>
+    </div>
+
+    <div class="section">
+      <div class="section-number">08</div>
+      <h2>Contact</h2>
+      <p>Questions about privacy? Reach out on Discord via the Bot's application page in the Discord Developer Portal. We'll respond as soon as we can.</p>
+    </div>
+  </div>
+
+</main>
+
+<footer>
+  <p>© 2026 MCDuels Checker · Not affiliated with MCDuels or Mojang</p>
+  <p>Built for <a href="https://discord.com">Discord</a></p>
+</footer>
+
+<script>
+  function showPage(page, el) {
+    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+    document.querySelectorAll('nav a').forEach(a => a.classList.remove('active'));
+    document.getElementById('page-' + page).classList.add('active');
+    el.classList.add('active');
+    return false;
+  }
+</script>
+
+</body>
+</html>
